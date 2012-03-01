@@ -1,0 +1,49 @@
+erlmacro
+========
+Just a couple of convenient macros for erlang programmers.
+
+How to use
+==========
+Just copy files under ./include directory wherever you need.
+
+log.hrl
+=======
+./test/log.erl shows how TRACE/1, DEBUG/1, INFO/1, WARNING/1 and ERROR/1 macros
+work.
+
+$ erlc -I include -o ebin -DDEBUG test/log.erl
+$ erl +W w -pa ebin
+
+1> log:showme().
+
+Also compile without the -DDEBUG flag and do the same to find differences.
+
+props_to_record.hrl
+===================
+Using proplists is a good way to transfer function parameters in erlang.
+You can take only some of the parameters in your function in arbitrary order
+and ignore others.
+
+person(Props) ->
+	Name = proplists:get_value(name, Props, "Default Name"),
+	Sex = proplists:get_value(sex, Props, male),
+	Age = proplists:get_value(age, Props), % default is undefined
+	...
+	
+You can do the above systematically as,
+
+-include("props_to_record.hrl").
+
+-record(person, {name="Default Name",
+                 sex=male,
+                 age}).
+
+person(Props) ->
+	Person = ?PROPS_TO_RECORD(Props, person),
+	% Use Person#person.name and so on...
+	...
+	
+The macro PROPS_TO_RECORD/2 macro converts arbitrary proplists into a
+predefined record which is more convenient to use.  Default values in the
+record definition is preserved if there is no property of the field name as
+the key.  Properties with an unknown key is ignored.
