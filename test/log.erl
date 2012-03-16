@@ -18,7 +18,8 @@
 %% API Functions
 %%
 showme() ->
-	A = ?DEBUG("This is a debug log."),
+	A = "This is a debug log.",
+	?DEBUG(A),
 	false = ?TRACE(A =:= "This is a trace log."),
 	?INFO("This is an info log."),
 	?WARNING("This is a warning log."),
