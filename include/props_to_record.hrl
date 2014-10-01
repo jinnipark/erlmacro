@@ -18,3 +18,5 @@
 			List = [proplists:get_value(F, Props, D) || {F, D} <- lists:zip(Fields, Defaults)],
 			list_to_tuple([Record | List])
 		end).
+
+-define(record_from(Record, Props), ?PROPS_TO_RECORD(Props, Record)).
